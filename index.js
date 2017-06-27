@@ -7,15 +7,12 @@ const errors = require('./lib/helpers/errors.js');
 const axios = require('axios');
 const admins = require('./lib/api/admins.js');
 const agents = require('./lib/api/agents.js');
-const bans = require('./lib/api/bans.js');
 const cards = require('./lib/api/cards.js');
 const companies = require('./lib/api/companies.js');
 const enrollments = require('./lib/api/enrollments.js');
 const invoices = require('./lib/api/invoices.js');
 const merchants = require('./lib/api/merchants.js');
-const regusers = require('./lib/api/regusers.js');
-const sms = require('./lib/api/sms.js');
-const wallets = require('./lib/api/wallets.js');
+const customers = require('./lib/api/customers.js');
 const qs = require('qs');
 const nacl = require('tweetnacl');
 const EventEmitter = require('events').EventEmitter;
@@ -30,11 +27,8 @@ class SmartApi extends EventEmitter {
             // Ttl for api requests
             request_ttl: 30,
 
-            // Enable debug mode
-            debug: false,
-
             // Set this to false to send requests via formdata and not raw json
-            sendRaw: true,
+            sendRaw: false
         }, options);
 
         this.axios;
@@ -47,7 +41,7 @@ class SmartApi extends EventEmitter {
         setInterval(function () {
             var expires = self.ttlExpiration - Math.floor(Date.now() / 1000);
 
-            if (self.nonce && expires <= 0 ) {
+            if (self.nonce && expires <= 0) {
                 self.nonce = null;
             }
 
@@ -109,10 +103,6 @@ class SmartApi extends EventEmitter {
                 ].join(':');
             }
 
-            if (self.options.debug) {
-                config.headers['Debug'] = true;
-            }
-
             return config;
         });
     }
@@ -166,15 +156,12 @@ module.exports = class {
 
         this.Admins = new admins(this.Api);
         this.Agents = new agents(this.Api);
-        this.Bans = new bans(this.Api);
         this.Cards = new cards(this.Api);
         this.Companies = new companies(this.Api);
+        this.Customers = new customers(this.Api);
         this.Enrollments = new enrollments(this.Api);
         this.Invoices = new invoices(this.Api);
         this.Merchants = new merchants(this.Api);
-        this.Regusers = new regusers(this.Api);
-        this.Sms = new sms(this.Api);
-        this.Wallets = new wallets(this.Api);
     }
 
     setKeypair(key) {
