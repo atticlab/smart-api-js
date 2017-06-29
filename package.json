@@ -16,8 +16,8 @@
     "tweetnacl": "^0.11.2"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "chai-as-promised": "^6.0.0",
+    "chai": "^4.0.2",
+    "chai-as-promised": "^7.0.0",
     "mocha": "^3.2.0",
     "stellar-sdk": "git+https://github.com/atticlab/smart-sdk-js.git"
   },

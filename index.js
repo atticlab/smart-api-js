@@ -70,7 +70,7 @@ class SmartApi extends EventEmitter {
         }, function (error) {
             self.nonce = null;
             if (error.response && error.response.data) {
-                return Promise.reject(errors.getProtocolError(error.response.data.error, error.response.data.message || ''));
+                return Promise.reject(new errors.ApiError(error.response.data.error, error.response.data.message || ''));
             }
 
             return Promise.reject(new errors.ConnectionError());
@@ -88,7 +88,8 @@ class SmartApi extends EventEmitter {
                 // For get parameter we need to add data to query
                 if (typeof config.params == 'object' && Object.keys(config.params).length) {
                     route += (route.indexOf('?') === -1 ? '?' : '&') + qs.stringify(config.params, {
-                            encode: false,
+                            encodeValuesOnly: true,
+                            format : 'RFC1738',
                             arrayFormat: 'brackets'
                         });
                 }
